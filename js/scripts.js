@@ -3,6 +3,7 @@ const gallery = document.getElementById('gallery');
 let staff;
 let body = document.querySelector('body');
 let contain = document.createElement('div');
+contain.style.display = 'none';
 
 $(contain).addClass('modal-container');
 $(body).append(contain);
@@ -50,7 +51,7 @@ fetch('https://randomuser.me/api/?results=12')
           street  = document.createElement('p'),
           bday    = document.createElement('p');
       $(modal).addClass('modal');
-      $(btn).attr({type:'button', id:'modal-close-btn', class:'modal-close-btn'}).append('<strong>&times</strong>');
+      $(btn).attr({type:'button', class:'modal-close-btn'}).append('<strong>&times</strong>');
       $(mInfo).addClass('modal-info-container');
       $(mImg).attr({class:'modal-img', src:staff.picture.large, alt:'profile picture'});
       $(mName).attr({id:'name', class:'modal-name cap'}).html(`${staff.name.first} ${staff.name.last}`);
@@ -71,20 +72,41 @@ fetch('https://randomuser.me/api/?results=12')
 
 const cards = document.getElementsByClassName('card');
 const modals = document.getElementsByClassName('modal');
+const close =
+      document.getElementsByClassName('modal-close-btn');
 
-contain.style.display = 'none';
-for (let i = 0; i < modals.length; i++) {
-  modals[i].style.display = 'none';
-}
+gallery.addEventListener('click', (event) => {
+  let clicked = event.target;
+  for (let i = 0; i < modals.length; i++) {
+    modals[i].style.display = 'none';
+  }
+  for (let j = 0; j < cards.length; j++) {
+    if (clicked === cards[j]) {
+      contain.style.display = '';
+      modals[j].style.display = '';
+    } else if ($(clicked).hasClass('card-img-container')
+            || $(clicked).hasClass('card-info-container')) {
+            if (clicked.parentNode === cards[j]) {
+              contain.style.display = '';
+              modals[j].style.display = '';
+            }
+    } else if ($(clicked).hasClass('card-img')
+            || $(clicked).hasClass('cap')
+            || $(clicked).hasClass('card-text')) {
+            if (clicked.parentNode.parentNode === cards[j]) {
+              contain.style.display = '';
+              modals[j].style.display = '';
+            }
+    }
+  }
+});
 
-// gallery.addEventListener('click', (event) => {
-//   let clicked = event.target;
-//   if (clicked.className === 'card') {
-//     console.log(event.target);
-//     for (let i = 0; i < cards.length; i++) {
-//       if (clicked = cards[i]) {
-//         modals[i].style.display = '';
-//       }
-//     }
-//   }
-// });
+contain.addEventListener('click', (event) => {
+  let clicked = event.target;
+  if (clicked.tagName === 'BUTTON' || clicked.tagName === 'STRONG') {
+    contain.style.display = 'none';
+    for (let j = 0; j < cards.length; j++) {
+      modals[j].style.display = 'none';
+    }
+  }
+});
