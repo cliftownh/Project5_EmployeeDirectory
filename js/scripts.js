@@ -11,7 +11,7 @@ $('.search-container').append('<form action="#" method="get" />');
 $('form').append('<input type="search" id="search-input" class="search-input" placeholder="Search...">');
 $('form').append('<input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">');
 
-fetch('https://randomuser.me/api/?results=12')
+fetch('https://randomuser.me/api?nat=us&results=12')
   .then(response => response.json())
   .then(function (data) {
     staff = data.results;
@@ -30,7 +30,7 @@ fetch('https://randomuser.me/api/?results=12')
       $(info).addClass('card-info-container');
       $(name).attr({id:'name', class:'card-name cap'}).html(`${staff.name.first} ${staff.name.last}`);
       $(mail).addClass('card-text').html(staff.email);
-      $(city).addClass('card-text cap').html(`${staff.location.city}, ${staff.location.state}`);
+      $(city).addClass('card-text cap').html(staff.location.city);
 
       $(gallery).append(card);
       $(card).append(div);
@@ -50,6 +50,7 @@ fetch('https://randomuser.me/api/?results=12')
           phone   = document.createElement('p'),
           street  = document.createElement('p'),
           bday    = document.createElement('p');
+
       $(modal).addClass('modal');
       $(btn).attr({type:'button', class:'modal-close-btn'}).append('<strong>&times</strong>');
       $(mInfo).addClass('modal-info-container');
@@ -58,7 +59,7 @@ fetch('https://randomuser.me/api/?results=12')
       $(mEmail).addClass('modal-text').html(staff.email);
       $(mCity).addClass('modal-text').html(staff.location.city);
       $(phone).addClass('modal-text').html(staff.cell);
-      $(street).addClass('modal-text').html(`${staff.location.street}, ${staff.location.city}, ${staff.location.state}, ${staff.location.postcode}`);
+      $(street).addClass('modal-text').html(`${staff.location.street}, ${staff.location.state}, ${staff.location.postcode}`);
       $(bday).addClass('modal-text').html(`Birthday: ${staff.dob.date}`);
 
       $(contain).append(modal);
@@ -78,24 +79,24 @@ const close =
 gallery.addEventListener('click', (event) => {
   let clicked = event.target;
   for (let i = 0; i < modals.length; i++) {
-    modals[i].style.display = 'none';
+    $(modals[i]).hide();
   }
   for (let j = 0; j < cards.length; j++) {
     if (clicked === cards[j]) {
-      contain.style.display = '';
-      modals[j].style.display = '';
+      $(contain).show();
+      $(modals[j]).show();
     } else if ($(clicked).hasClass('card-img-container')
             || $(clicked).hasClass('card-info-container')) {
             if (clicked.parentNode === cards[j]) {
-              contain.style.display = '';
-              modals[j].style.display = '';
+              $(contain).show();;
+              $(modals[j]).show();
             }
     } else if ($(clicked).hasClass('card-img')
             || $(clicked).hasClass('cap')
             || $(clicked).hasClass('card-text')) {
             if (clicked.parentNode.parentNode === cards[j]) {
-              contain.style.display = '';
-              modals[j].style.display = '';
+              $(contain).show();;
+              $(modals[j]).show();
             }
     }
   }
@@ -104,9 +105,9 @@ gallery.addEventListener('click', (event) => {
 contain.addEventListener('click', (event) => {
   let clicked = event.target;
   if (clicked.tagName === 'BUTTON' || clicked.tagName === 'STRONG') {
-    contain.style.display = 'none';
+    $(contain).hide();
     for (let j = 0; j < cards.length; j++) {
-      modals[j].style.display = 'none';
+      $(modals[j]).hide();
     }
   }
 });
