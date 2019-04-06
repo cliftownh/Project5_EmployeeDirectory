@@ -250,6 +250,7 @@ header h1 {
     .card:hover {
         background: rgba(255, 255, 255, 1);
         border: 1px solid rgba(50, 50, 50, 0.9);
+				box-shadow: 6px 6px 7px 0px rgba(0,0,0,0.75);
     }
 
     .card:hover .card-text {
@@ -257,7 +258,7 @@ header h1 {
     }
 
     .btn:hover {
-        background: rgba(255, 255, 255, 1);
+        background: rgba(231, 166, 26, 1);
         color: rgba(25, 25, 25, 1);
     }
 }
